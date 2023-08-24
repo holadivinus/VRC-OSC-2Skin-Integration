@@ -45,14 +45,14 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(305, 104);
+            this.label1.Size = new System.Drawing.Size(305, 130);
             this.label1.TabIndex = 0;
             this.label1.Text = resources.GetString("label1.Text");
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 122);
+            this.label2.Location = new System.Drawing.Point(12, 164);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(100, 13);
             this.label2.TabIndex = 1;
@@ -61,7 +61,7 @@
             // cmdArgLabel
             // 
             this.cmdArgLabel.AutoSize = true;
-            this.cmdArgLabel.Location = new System.Drawing.Point(12, 135);
+            this.cmdArgLabel.Location = new System.Drawing.Point(12, 187);
             this.cmdArgLabel.Name = "cmdArgLabel";
             this.cmdArgLabel.Size = new System.Drawing.Size(51, 13);
             this.cmdArgLabel.TabIndex = 2;
@@ -70,7 +70,7 @@
             // debug
             // 
             this.debug.AutoSize = true;
-            this.debug.Location = new System.Drawing.Point(12, 173);
+            this.debug.Location = new System.Drawing.Point(12, 218);
             this.debug.Name = "debug";
             this.debug.Size = new System.Drawing.Size(109, 13);
             this.debug.TabIndex = 3;
@@ -78,7 +78,7 @@
             // 
             // Freq
             // 
-            this.Freq.Location = new System.Drawing.Point(144, 211);
+            this.Freq.Location = new System.Drawing.Point(144, 262);
             this.Freq.Name = "Freq";
             this.Freq.Size = new System.Drawing.Size(38, 20);
             this.Freq.TabIndex = 9;
@@ -92,7 +92,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 213);
+            this.label7.Location = new System.Drawing.Point(12, 264);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(86, 39);
             this.label7.TabIndex = 10;
@@ -100,7 +100,7 @@
             // 
             // Stren
             // 
-            this.Stren.Location = new System.Drawing.Point(144, 230);
+            this.Stren.Location = new System.Drawing.Point(144, 281);
             this.Stren.Name = "Stren";
             this.Stren.Size = new System.Drawing.Size(38, 20);
             this.Stren.TabIndex = 12;
@@ -115,7 +115,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(331, 261);
+            this.ClientSize = new System.Drawing.Size(331, 323);
             this.Controls.Add(this.Stren);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.Freq);

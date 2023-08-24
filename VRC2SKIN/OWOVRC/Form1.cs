@@ -63,6 +63,12 @@ namespace OWOVRC
                     case "-VRCPORT":
                         VRCPORT = int.Parse(curVal);
                         break;
+                    case "-STRENGTH":
+                        Stren.Value = Strength = int.Parse(curVal);
+                        break;
+                    case "-FREQUENCY":
+                        Freq.Value = Frequency = int.Parse(curVal);
+                        break;
                 }
             }
 #else
@@ -138,7 +144,6 @@ namespace OWOVRC
                     }
                     if (s_shutdown)
                         break;
-                    
                 }
             }).Start();
         }

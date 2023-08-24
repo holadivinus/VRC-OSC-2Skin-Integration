@@ -122,9 +122,11 @@
 This is braindamaging, all the older supported apps dont work
 now (neos, vrc, etc)
 
-this runs via 3 command line arguments:
+this runs via 5 command line arguments:
 -OWOIP ip_address
 -VRCIP ip_address
--VRCPORT port</value>
+-VRCPORT port
+-STRENGTH 0-100
+-FREQUENCY 0-100</value>
   </data>
 </root>
