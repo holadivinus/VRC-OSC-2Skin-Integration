@@ -27,7 +27,6 @@ namespace OWOVRC
             public volatile bool curState;
             public Muscle Muscle;
         }
-        private static BakedSensation bs = BakedSensation.Parse($"0~Touch~80,3,60,0,0,0,~{OWOGame.Icon.Environment}");
         private static readonly Dictionary<string, OWOTriggerer> Triggers = new Dictionary<string, OWOTriggerer>() 
         {
             {"Pectoral_R", new OWOTriggerer(Muscle.Pectoral_R)},
@@ -75,8 +74,6 @@ namespace OWOVRC
             // Async listen thread
             new Thread(async () => 
             {
-                OWO.Configure(GameAuth.Create(bs));
-
                 await OWO.AutoConnect();
 
                 runOnUIThread(() =>
@@ -120,10 +117,16 @@ namespace OWOVRC
             new Thread(() =>
             {
                 OWOTriggerer[] trigs = Triggers.Values.ToArray();
-                while(true)
+                Sensation sen = Sensation.Parse($"0~Touch~{Frequency},3,{Strength},0,0,0,~{OWOGame.Icon.Environment}");
+                while (true)
                 {
                     Thread.Sleep(300);
-                    if (OWO.ConnectionState == OWOGame.ConnectionState.Connected)
+                    if (Dirty)
+                    {
+                        Dirty = false;
+                        sen = Sensation.Parse($"0~Touch~{Frequency},3,{Strength},0,0,0,~{OWOGame.Icon.Environment}");
+                    }
+                    if (OWO.ConnectionState == ConnectionState.Connected)
                     {
                         List<Muscle> targs = new List<Muscle>();
                         foreach (OWOTriggerer trig in trigs)
@@ -131,7 +134,7 @@ namespace OWOVRC
                                 targs.Add(trig.Muscle);
                         
                         if (targs.Count > 0)
-                        OWO.Send(bs, targs.ToArray());
+                            OWO.Send(sen, targs.ToArray());
                     }
                     if (s_shutdown)
                         break;
@@ -141,6 +144,22 @@ namespace OWOVRC
         private void runOnUIThread(Action function)
         {
             Invoke(new MethodInvoker(function));
+        }
+
+        private static volatile int Frequency;
+        private static volatile int Strength;
+        private static volatile bool Dirty;
+
+        private void Freq_ValueChanged(object sender, EventArgs e)
+        {
+            Frequency = (int)Freq.Value;
+            Dirty = true;
+        }
+
+        private void Stren_ValueChanged(object sender, EventArgs e)
+        {
+            Strength = (int)Stren.Value;
+            Dirty = true;
         }
     }
 }
