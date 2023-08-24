@@ -117,27 +117,28 @@ namespace OWOVRC
             new Thread(() =>
             {
                 OWOTriggerer[] trigs = Triggers.Values.ToArray();
-                Sensation sen = Sensation.Parse($"0~Touch~{Frequency},3,{Strength},0,0,0,~{OWOGame.Icon.Environment}");
-                while (true)
+                MicroSensation sen = null;
+                while(true)
                 {
                     Thread.Sleep(300);
                     if (Dirty)
                     {
                         Dirty = false;
-                        sen = Sensation.Parse($"0~Touch~{Frequency},3,{Strength},0,0,0,~{OWOGame.Icon.Environment}");
+                        sen = SensationsFactory.Create(Frequency, .3f, Strength);
                     }
                     if (OWO.ConnectionState == ConnectionState.Connected)
                     {
                         List<Muscle> targs = new List<Muscle>();
                         foreach (OWOTriggerer trig in trigs)
                             if (trig.curState)
-                                targs.Add(trig.Muscle);
-                        
+                                targs.Add(trig.Muscle.WithIntensity(Strength));
+
                         if (targs.Count > 0)
-                            OWO.Send(sen, targs.ToArray());
+                            OWO.Send(sen.WithMuscles(targs.ToArray()));
                     }
                     if (s_shutdown)
                         break;
+                    
                 }
             }).Start();
         }
@@ -146,19 +147,19 @@ namespace OWOVRC
             Invoke(new MethodInvoker(function));
         }
 
-        private static volatile int Frequency;
-        private static volatile int Strength;
-        private static volatile bool Dirty;
+        private static volatile int Frequency = 40;
+        private static volatile int Strength = 30;
+        private static volatile bool Dirty = true;
 
         private void Freq_ValueChanged(object sender, EventArgs e)
         {
-            Frequency = (int)Freq.Value;
+            Frequency = (int)Freq.Value/4;
             Dirty = true;
         }
 
         private void Stren_ValueChanged(object sender, EventArgs e)
         {
-            Strength = (int)Stren.Value;
+            Strength = (int)Stren.Value/4;
             Dirty = true;
         }
     }
