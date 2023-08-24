@@ -1,13 +1,8 @@
 ﻿using SharpOSC;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using OWOGame;
 
@@ -23,6 +18,8 @@ namespace OWOVRC
         private static string VRCIP;
         private static int VRCPORT;
         private static string OWOIP;
+
+        private static volatile bool s_shutdown = false;
 
         private class OWOTriggerer
         {
@@ -45,6 +42,7 @@ namespace OWOVRC
         };
         private void OWO_VRC_FORM_Load(object sender, EventArgs e)
         {
+            FormClosed += (a, b) => s_shutdown = true;
 #if DEBUG
             string[] cmdArgs = Environment.GetCommandLineArgs().Skip(1).ToArray();
             cmdArgLabel.Text = string.Join(" ", cmdArgs);
@@ -80,9 +78,10 @@ namespace OWOVRC
                 OWO.Configure(GameAuth.Create(bs));
 
                 await OWO.AutoConnect();
+
                 runOnUIThread(() =>
                 {
-                    debug.Text = "CON";
+                    debug.Text = "Connected to OWO!";
                 });
                 UDPListener listener = new UDPListener(VRCPORT);
                 OscMessage messageReceived = null;
@@ -103,13 +102,18 @@ namespace OWOVRC
                         continue;
 
                     if (Triggers.TryGetValue(messageReceived.Address.Substring(28), out OWOTriggerer trig)) 
-                    //{ 
+                    { 
                         trig.curState = (bool)messageReceived.Arguments[0];
-                        //runOnUIThread(() =>
+#if DEBUG
+                        runOnUIThread(() =>
                         {
-                        //    debug.Text = trig.curState.ToString();//.Substring(28);// messageReceived.Address + "  " + messageReceived.Arguments[0];
-                        }//);
-                    //}
+                            debug.Text = messageReceived.Address + "  " + messageReceived.Arguments[0];
+                        });
+#endif
+                    }
+
+                    if (s_shutdown)
+                        break;
                 }
             }).Start();
 
@@ -129,12 +133,14 @@ namespace OWOVRC
                         if (targs.Count > 0)
                         OWO.Send(bs, targs.ToArray());
                     }
+                    if (s_shutdown)
+                        break;
                 }
             }).Start();
         }
         private void runOnUIThread(Action function)
         {
-            this.Invoke(new MethodInvoker(function));
+            Invoke(new MethodInvoker(function));
         }
     }
 }
