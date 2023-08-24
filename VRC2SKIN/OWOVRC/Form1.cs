@@ -80,7 +80,11 @@ namespace OWOVRC
             // Async listen thread
             new Thread(async () => 
             {
+#if DEBUG
+                await OWO.Connect(OWOIP);
+#else
                 await OWO.AutoConnect();
+#endif
 
                 runOnUIThread(() =>
                 {
